@@ -1,6 +1,6 @@
 
 function isRequired(value) {
-  return value && value.trim() !== '';
+  return value !== undefined && value !== null && value.toString().trim() !== '';
 }
 
 function validatePlate(plate) {
@@ -72,3 +72,9 @@ function validateCarFields(car) {
   }
   return errors;
 }
+module.exports = {
+  isRequired,
+  validatePlate,
+  validateYear,
+  validateCarFields,
+};
