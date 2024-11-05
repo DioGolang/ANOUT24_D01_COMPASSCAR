@@ -1,0 +1,23 @@
+services:
+  mysql:
+    image: mysql:latest
+    user: "1000:1000"
+    restart: always
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - .docker/db_data:/var/lib/mysql:Z
+      - ./mysql-init:/docker-entrypoint-initdb.d:Z
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin -uroot -proot ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  db_data:
