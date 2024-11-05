@@ -35,7 +35,7 @@ sudo chown -R 1001:1001 ./mysql-init
 
 To build and start the Docker containers, run:
 ```bash
-docker-compose up
+docker compose up
 ```
 
 This will pull the required images and set up the environment.
@@ -51,7 +51,7 @@ npm install
 
 Once the setup is complete and dependencies are installed, you can run the application with the following command
 
-```
+```bash
 npm start
 ```
 This will start the development server and you can access the app on the designated port (check your .env file or default settings).
