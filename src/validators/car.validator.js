@@ -1,7 +1,8 @@
 
 function isRequired(value) {
-  return value !== undefined && value !== null && value.toString().trim() !== '';
+  return value !== undefined && value !== null && value.toString().trim() !== '' && !(typeof value === 'object' && Object.keys(value).length === 0);
 }
+
 
 function duplicatePlate(plate, cars) {
   return cars.some(car => car.plate === plate);
@@ -42,9 +43,9 @@ function isNumber(char) {
 
 function validateYear(year) {
   const currentYear = new Date().getFullYear();
-  const minYear = currentYear - 10;
-  const maxYear = currentYear + 10;
-  return year >= minYear && year <= maxYear && year <= currentYear;
+  const minYear = currentYear - 9;
+  const maxYear = currentYear + 1;
+  return year >= minYear && year <= maxYear;
 }
 
 function validateRequired(fieldName, value, errors) {
@@ -59,7 +60,7 @@ function validateField(name, value, validator, errorMessage, errors) {
   }
 }
 
-function validateCarFields(car) {
+function validateCarFields(car, cars) {
   const errors = [];
 
   validateRequired('brand', car.brand, errors);
@@ -68,17 +69,19 @@ function validateCarFields(car) {
   validateRequired('plate', car.plate, errors);
   duplicatePlate(car.plate, cars) && errors.push('car plate already registered');
 
+  if (car.plate && !validatePlate(car.plate)) {
+    errors.push('plate must be in the correct format ABC-1C34');
+  }
+
   if (car.year && !validateYear(car.year)) {
     errors.push(`year must be between ${new Date().getFullYear() - 10} and ${new Date().getFullYear()}`);
   }
 
-  if (car.plate && !validatePlate(car.plate)) {
-    errors.push('plate must be in the correct format ABC-1C34');
-  }
   return errors;
 }
 module.exports = {
   isRequired,
+  duplicatePlate,
   validatePlate,
   validateYear,
   validateCarFields,
