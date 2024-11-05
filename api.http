@@ -1,0 +1,10 @@
+### CREATE CAR
+POST http://localhost:3000/api/v1/cars
+Content-Type: application/json
+
+{
+  "brand": "Marca",
+  "model": "Modelo",
+  "year": 2018,
+  "plate": "ABC-1D23"
+}
