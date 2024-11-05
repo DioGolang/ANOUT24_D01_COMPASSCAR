@@ -3,6 +3,10 @@ function isRequired(value) {
   return value !== undefined && value !== null && value.toString().trim() !== '';
 }
 
+function duplicatePlate(plate, cars) {
+  return cars.some(car => car.plate === plate);
+}
+
 function validatePlate(plate) {
   if(plate.length !== 8) {
     return false;
@@ -62,6 +66,7 @@ function validateCarFields(car) {
   validateRequired('model', car.model, errors);
   validateRequired('year', car.year, errors);
   validateRequired('plate', car.plate, errors);
+  duplicatePlate(car.plate, cars) && errors.push('car plate already registered');
 
   if (car.year && !validateYear(car.year)) {
     errors.push(`year must be between ${new Date().getFullYear() - 10} and ${new Date().getFullYear()}`);

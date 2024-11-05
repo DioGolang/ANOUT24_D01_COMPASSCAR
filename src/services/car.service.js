@@ -1,7 +1,33 @@
 const CarModel = require('../models/car.model');
+const CarException = require('../errors/car.exception');
+const { validateCarFields } = require('../validators/car.validator');
 
 const CarService = {
+
+  async getAll() {
+    try {
+      return await CarModel.findAll();
+    } catch (error) {
+      console.error('Error finding cars:', error.message);
+      throw error;
+    }
+  },
+
+  async getByPlate(plate) {
+    try {
+      return await CarModel.findByPlate(plate);
+    } catch (error) {
+      console.error('Error finding car by plate:', error.message);
+      throw error;
+    }
+  },
   async create(car) {
+    const validationErrors = validateCarFields(car);
+
+    if (validationErrors.length > 0) {
+      throw new CarException(validationErrors.join(', '), 400, 'VALIDATION_ERROR');
+    }
+
     try {
       return await CarModel.create(car);
     } catch (error) {
