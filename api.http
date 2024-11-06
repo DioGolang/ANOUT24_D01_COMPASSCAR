@@ -43,8 +43,7 @@ Content-type: application/json
 {
   "brand": "Marca",
   "model": "Modelo",
-  "year": 2018,
-  "plate": "BBC-1D01"
+  "year": 2080
 }
 
 ### DELETE CAR

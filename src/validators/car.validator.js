@@ -4,7 +4,9 @@ function isRequired(value) {
 }
 
 function duplicatePlate(plate, cars = []) {
-  console.log("array", cars);
+  if (!Array.isArray(cars)) {
+    cars = [];
+  }
   return cars.some(car => car.plate === plate);
 }
 
@@ -45,6 +47,7 @@ function validateYear(year) {
   const currentYear = new Date().getFullYear();
   const minYear = currentYear - 9;
   const maxYear = currentYear + 1;
+  console.log(year >= minYear && year <= maxYear);
   return year >= minYear && year <= maxYear;
 }
 

@@ -110,16 +110,37 @@ const CarModel = {
     }
   },
   async update(id, car) {
-    [ brand, model, year, plate ] = car;
+    console.log('AQUI', car);
     try {
       const connection = await dbConnection();
-      const [result] = await connection.query(
-        `UPDATE cars SET brand = ?, model = ?, year = ?, plate = ? WHERE id = ?`,
-        [car.brand, car.model, car.year, car.plate, id]
-      );
+      const fields = [];
+      const values = [];
+
+      if (car.brand) {
+        fields.push('brand = ?');
+        values.push(car.brand);
+      }
+      if (car.model) {
+        fields.push('model = ?');
+        values.push(car.model);
+      }
+      if (car.year) {
+        fields.push('year = ?');
+        values.push(car.year);
+      }
+      if (car.plate) {
+        fields.push('plate = ?');
+        values.push(car.plate);
+      }
+      values.push(id);
+
+      const query = `UPDATE cars SET ${fields.join(', ')} WHERE id = ?`;
+
+      const [result] = await connection.query(query, values);
       connection.end();
+
       const updatedCar = await this.findById(id);
-      return {id: updatedCar.id, ...car}; // no banco acrescentar o  updated_at
+      return {id: updatedCar.id, ...car};
     } catch (error) {
       console.error('Error updating car:', error.message);
       throw error;

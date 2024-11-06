@@ -46,12 +46,8 @@ const CarService = {
     }
   },
   async update(id, car) {
-    const existingCar = await CarModel.findById(id);
-    const validationErrors = validateCarFields(car, existingCar);
-    if(validationErrors.length > 0) {
-      throw new CarException(validationErrors.join(', '), 400, 'VALIDATION_ERROR');
-    }
     try{
+      console.log('SERVICE', car);
       return await CarModel.update(id, car);
     } catch (error) {
       console.error('Error updating car:', error.message);
