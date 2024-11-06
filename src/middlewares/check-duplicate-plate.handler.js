@@ -1,7 +1,7 @@
 const CarService = require('../services/car.service');
 const CarException = require('../errors/car.exception');
 
-const checkDuplicatePlate = async (req, res, next) => {
+const checkDuplicatePlateHandler = async (req, res, next) => {
   try {
     const { plate } = req.body;
     const car = await CarService.getByPlate(plate);
@@ -13,4 +13,4 @@ const checkDuplicatePlate = async (req, res, next) => {
     next(error);
   }
 }
-module.exports = checkDuplicatePlate;
+module.exports = checkDuplicatePlateHandler;

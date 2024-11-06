@@ -1,12 +1,15 @@
 const express = require('express')
 const CarController = require('../controllers/car.controller')
-const checkDuplicatePlate = require('../middlewares/check-duplicate-plate.handler');
+const CarItemController = require('../controllers/car-item.controller')
+const checkDuplicatePlateHandler = require('../middlewares/check-duplicate-plate.handler');
+const carNotFoundHandler = require('../middlewares/car-not-found.handler')
 
 const errorHandler = require('../middlewares/error.handler')
 
 const router = express.Router()
 
-router.post('/', checkDuplicatePlate, CarController.create)
+router.post('/', checkDuplicatePlateHandler, CarController.create)
+router.post('/:id/items', carNotFoundHandler,  CarItemController.create)
 router.use(errorHandler);
 
 module.exports = router;

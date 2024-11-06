@@ -3,8 +3,20 @@ POST http://localhost:3000/api/v1/cars
 Content-Type: application/json
 
 {
-  "brand": "",
-  "model": "",
+  "brand": "Marca13",
+  "model": "Modelo13",
   "year": 2018,
-  "plate": "ABC-1D25"
+  "plate": "ABC-1D59"
 }
+
+> {% client.global.set("carId", response.body.id); %}
+
+### CREATE ITENS
+POST http://localhost:3000/api/v1/cars/3/items
+Content-Type: application/json
+
+  [
+    "Ar condicionado",
+    "Trava Eletrica",
+    "Vidro Eletrico"
+  ]

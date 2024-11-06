@@ -22,17 +22,17 @@ const CarService = {
     }
   },
   async create(car) {
-    try {
-      const existingCars = await CarModel.findAll();
-      const validationErrors = validateCarFields(car, existingCars);
+    const existingCars = await CarModel.findAll();
+    const validationErrors = validateCarFields(car, existingCars);
 
-      if (validationErrors.length > 0) {
-        throw new CarException(validationErrors.join(', '), 400, 'VALIDATION_ERROR');
-      }
+    if (validationErrors.length > 0) {
+      throw new CarException(validationErrors.join(', '), 400, 'VALIDATION_ERROR');
+    }
+    try {
       return await CarModel.create(car);
     } catch (error) {
       console.error('Error creating car:', error.message);
-      throw error;
+      throw new CarException('Internal Server Error', 500, 'INTERNAL_SERVER_ERROR');
     }
   }
 };

@@ -13,6 +13,18 @@ const CarModel = {
     }
   },
 
+  findById: async function(id) {
+    try {
+      const connection = await dbConnection();
+      const [rows] = await connection.query('SELECT * FROM cars WHERE id = ?', [id]);
+      connection.end();
+      return rows[0] || null;
+    } catch (error) {
+      console.error('Error fetching car by id:', error.message);
+      throw error;
+    }
+  },
+
   findByPlate: async function(plate) {
     try {
       const connection = await dbConnection();
@@ -32,7 +44,8 @@ const CarModel = {
         [car.brand, car.model, car.year, car.plate]
       );
       connection.end();
-      return {id: result.insertId, ...car};
+      const createdCar = await this.findById(result.insertId);
+      return {id: createdCar.id, ...car, created_at: createdCar.created_at};u
     } catch (error) {
       console.error('Error creating car:', error.message);
       throw error;
