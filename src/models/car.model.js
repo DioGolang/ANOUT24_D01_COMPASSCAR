@@ -28,10 +28,10 @@ const CarModel = {
         params.push(`%${final_place}`);
       }
       if (brand) {
-        conditions.push('brand = ?');
-        params.push(brand);
+        conditions.push('brand  LIKE ?');
+        params.push(`%${brand}%`);
       }
-      const whereClause = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
+      const whereClause = conditions.length ? ` WHERE ${conditions.join(' AND ')}` : '';
       const offset = (page - 1) * limit;
       const [cars] = await connection.query('SELECT * FROM cars' + whereClause + ' LIMIT ? OFFSET ?', [...params, limit, offset]);
       const [countResult] = await connection.query(`SELECT COUNT(*) as count FROM cars ${whereClause}`, params);

@@ -1,6 +1,15 @@
 ### ALL CARS
 GET http://localhost:3000/api/v1/cars
 
+### ALL CARS WITH FILTER
+GET http://localhost:3000/api/v1/cars?brand=ar
+
+### ALL CARS WITH FILTER
+GET http://localhost:3000/api/v1/cars?year=2019
+
+### ALL CARS WITH FILTER
+GET http://localhost:3000/api/v1/cars?year=2019&brand=Marca
+
 ### FIND CARS
 GET http://localhost:3000/api/v1/cars/10
 
