@@ -19,5 +19,14 @@ const CarController = {
       next(error);
     }
   },
+  async getById(req, res, next) {
+    try {
+      const { id } = req.params;
+      const car = await CarService.getById(id);
+      res.status(200).json(car);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 module.exports = CarController;

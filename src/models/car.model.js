@@ -59,6 +59,29 @@ const CarModel = {
     }
   },
 
+  findByIdWithItems: async function(id) {
+    try {
+      const connection = await dbConnection();
+      const [rows] = await connection.query('SELECT cars.*, COALESCE(cars_items.name, \'\') as name FROM cars LEFT JOIN cars_items ON cars.id = cars_items.car_id WHERE cars.id = ?', [id]);
+      connection.end();
+
+      console.log('rows', rows.name);
+      const car = {
+        id: rows[0].id,
+        brand: rows[0].brand,
+        model: rows[0].model,
+        year: rows[0].year,
+        plate: rows[0].plate,
+        created_at: rows[0].created_at,
+        items: rows.name ? rows.map(row => row.name) : []
+      };
+      return car;
+    } catch (error) {
+      console.error('Error fetching car by id:', error.message);
+      throw error;
+    }
+  },
+
   findByPlate: async function(plate) {
     try {
       const connection = await dbConnection();

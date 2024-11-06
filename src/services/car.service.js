@@ -13,6 +13,15 @@ const CarService = {
     }
   },
 
+  async getById(id) {
+    try {
+      return await CarModel.findByIdWithItems(id);
+    } catch (error) {
+      console.error('Error finding car by id:', error.message);
+      throw error;
+    }
+  },
+
   async getByPlate(plate) {
     try {
       return await CarModel.findByPlate(plate);
