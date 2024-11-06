@@ -103,9 +103,25 @@ const CarModel = {
       );
       connection.end();
       const createdCar = await this.findById(result.insertId);
-      return {id: createdCar.id, ...car, created_at: createdCar.created_at};u
+      return {id: createdCar.id, ...car, created_at: createdCar.created_at};
     } catch (error) {
       console.error('Error creating car:', error.message);
+      throw error;
+    }
+  },
+  async update(id, car) {
+    [ brand, model, year, plate ] = car;
+    try {
+      const connection = await dbConnection();
+      const [result] = await connection.query(
+        `UPDATE cars SET brand = ?, model = ?, year = ?, plate = ? WHERE id = ?`,
+        [car.brand, car.model, car.year, car.plate, id]
+      );
+      connection.end();
+      const updatedCar = await this.findById(id);
+      return {id: updatedCar.id, ...car}; // no banco acrescentar o  updated_at
+    } catch (error) {
+      console.error('Error updating car:', error.message);
       throw error;
     }
   }

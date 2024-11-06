@@ -35,3 +35,17 @@ Content-Type: application/json
     "Trava Eletrica",
     "Vidro Eletrico"
   ]
+
+### UPDATE CAR
+PATCH http://localhost:3000/api/v1/cars/10
+Content-type: application/json
+
+{
+  "brand": "Marca",
+  "model": "Modelo",
+  "year": 2018,
+  "plate": "BBC-1D01"
+}
+
+### DELETE CAR
+DELETE http://localhost:3000/api/v1/cars/10

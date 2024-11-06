@@ -44,6 +44,19 @@ const CarService = {
       console.error('Error creating car:', error.message);
       throw new CarException('Internal Server Error', 500, 'INTERNAL_SERVER_ERROR');
     }
+  },
+  async update(id, car) {
+    const existingCar = await CarModel.findById(id);
+    const validationErrors = validateCarFields(car, existingCar);
+    if(validationErrors.length > 0) {
+      throw new CarException(validationErrors.join(', '), 400, 'VALIDATION_ERROR');
+    }
+    try{
+      return await CarModel.update(id, car);
+    } catch (error) {
+      console.error('Error updating car:', error.message);
+      throw new CarException('Internal Server Error', 500, 'INTERNAL_SERVER_ERROR')
+    }
   }
 };
 module.exports = CarService;
