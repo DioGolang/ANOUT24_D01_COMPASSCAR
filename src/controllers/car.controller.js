@@ -36,6 +36,15 @@ const CarController = {
     } catch (error) {
       next(error);
     }
+  },
+  async delete(req, res, next) {
+    try {
+      const { id } = req.params;
+      await CarService.delete(id);
+      res.status(204).end();
+    } catch (error) {
+      next(error);
+    }
   }
 }
 module.exports = CarController;

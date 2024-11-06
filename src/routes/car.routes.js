@@ -12,6 +12,7 @@ router.get('/', CarController.getAll)
 router.get('/:id', carNotFoundHandler, CarController.getById)
 router.post('/', checkDuplicatePlateHandler, CarController.create)
 router.patch('/:id', [carNotFoundHandler, checkDuplicatePlateHandler], CarController.update)
+router.delete('/:id', carNotFoundHandler, CarController.delete)
 router.post('/:id/items', carNotFoundHandler,  CarItemController.create)
 router.use(errorHandler);
 module.exports = router;

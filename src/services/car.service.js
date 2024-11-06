@@ -57,6 +57,14 @@ const CarService = {
       console.error('Error updating car:', error.message);
       throw new CarException('Internal Server Error', 500, 'INTERNAL_SERVER_ERROR')
     }
+  },
+  async delete(id) {
+    try {
+      return await CarModel.delete(id);
+    } catch (error) {
+      console.error('Error deleting car:', error.message);
+      throw new CarException('Internal Server Error', 500, 'INTERNAL_SERVER_ERROR');
+    }
   }
 };
 module.exports = CarService;

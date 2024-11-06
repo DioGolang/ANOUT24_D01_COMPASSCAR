@@ -124,6 +124,16 @@ const CarModel = {
       console.error('Error updating car:', error.message);
       throw error;
     }
+  },
+  async delete(id) {
+    try {
+      const connection = await dbConnection();
+      await connection.query('DELETE FROM cars WHERE id = ?', [id]);
+      connection.end();
+    } catch (error) {
+      console.error('Error deleting car:', error.message);
+      throw error;
+    }
   }
 }
 module.exports = CarModel;
