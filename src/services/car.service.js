@@ -4,9 +4,9 @@ const { validateCarFields } = require('../validators/car.validator');
 
 const CarService = {
 
-  async getAll() {
+  async getAll(filters) {
     try {
-      return await CarModel.findAll();
+      return await CarModel.findAll(filters);
     } catch (error) {
       console.error('Error finding cars:', error.message);
       throw error;

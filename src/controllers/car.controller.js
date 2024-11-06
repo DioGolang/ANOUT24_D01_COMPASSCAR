@@ -9,6 +9,15 @@ const CarController = {
     } catch (error) {
       next(error);
     }
-  }
+  },
+  async getAll(req, res, next) {
+    try {
+      const filters = req.query;
+      const cars = await CarService.getAll(filters);
+      res.status(200).json(cars);
+    } catch (error) {
+      next(error);
+    }
+  },
 }
 module.exports = CarController;

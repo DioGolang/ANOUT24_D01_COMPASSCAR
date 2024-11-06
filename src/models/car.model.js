@@ -1,12 +1,41 @@
 const dbConnection = require('../utils/db');
 
 const CarModel = {
-  findAll: async function() {
+  findAll: async function(filters = {}) {
     try {
       const connection = await dbConnection();
-      const [rows] = await connection.query('SELECT * FROM cars');
+      let { year, final_place, brand, limit = 5, page = 1 } = filters; // fazer um middleware para validar os campos
+      const conditions = [];
+      const params = [];
+
+      if( page < 1) {
+       page = 1;
+      }
+
+      //caso coloque um valor negativo no limit ou um valor maior que 10 o que vai retormar ?
+
+      if (year) {
+        conditions.push('year = ?');
+        params.push(year);
+      }
+      if (final_place) {
+        conditions.push('plate LIKE ?');
+        params.push(`%${final_place}`);
+      }
+      if (brand) {
+        conditions.push('brand = ?');
+        params.push(brand);
+      }
+      const whereClause = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
+      const offset = (page - 1) * limit;
+      const [cars] = await connection.query('SELECT * FROM cars' + whereClause + ' LIMIT ? OFFSET ?', [...params, limit, offset]);
+      const [countResult] = await connection.query(`SELECT COUNT(*) as count FROM cars ${whereClause}`, params);
+      const pages = Math.ceil(countResult[0].count / limit);
       connection.end();
-      return rows;
+      if(cars.length === 0) {
+        return {count: countResult[0].count, pages: 0, data: []};
+      }
+      return {count: countResult[0].count, pages: pages, data: cars};
     } catch (error) {
       console.error('Error fetching cars:', error.message);
       throw error;
@@ -52,5 +81,4 @@ const CarModel = {
     }
   }
 }
-
 module.exports = CarModel;

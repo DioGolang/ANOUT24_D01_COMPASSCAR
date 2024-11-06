@@ -8,8 +8,8 @@ const errorHandler = require('../middlewares/error.handler')
 
 const router = express.Router()
 
+router.get('/', CarController.getAll)
 router.post('/', checkDuplicatePlateHandler, CarController.create)
 router.post('/:id/items', carNotFoundHandler,  CarItemController.create)
 router.use(errorHandler);
-
 module.exports = router;

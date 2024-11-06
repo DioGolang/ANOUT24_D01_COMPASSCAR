@@ -1,3 +1,6 @@
+### ALL CARS
+GET http://localhost:3000/api/v1/cars
+
 ### CREATE CAR
 POST http://localhost:3000/api/v1/cars
 Content-Type: application/json
