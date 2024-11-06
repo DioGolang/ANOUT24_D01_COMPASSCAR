@@ -3,7 +3,8 @@ function isRequired(value) {
   return value !== undefined && value !== null && value.toString().trim() !== '' && !(typeof value === 'object' && Object.keys(value).length === 0);
 }
 
-function duplicatePlate(plate, cars) {
+function duplicatePlate(plate, cars = []) {
+  console.log("array", cars);
   return cars.some(car => car.plate === plate);
 }
 

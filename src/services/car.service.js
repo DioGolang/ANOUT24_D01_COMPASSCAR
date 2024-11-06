@@ -22,7 +22,8 @@ const CarService = {
     }
   },
   async create(car) {
-    const existingCars = await CarModel.findAll();
+    const existingCars = await CarModel.findByPlate();
+    console.log('existingCars', existingCars);
     const validationErrors = validateCarFields(car, existingCars);
 
     if (validationErrors.length > 0) {

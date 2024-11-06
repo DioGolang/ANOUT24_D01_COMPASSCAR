@@ -5,6 +5,7 @@ const checkDuplicatePlateHandler = async (req, res, next) => {
   try {
     const { plate } = req.body;
     const car = await CarService.getByPlate(plate);
+    console.log('car', car);
     if (car) {
       throw new CarException('Car already registered', 409);
     }

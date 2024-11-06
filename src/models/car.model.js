@@ -1,6 +1,7 @@
 const dbConnection = require('../utils/db');
 
 const CarModel = {
+
   findAll: async function(filters = {}) {
     try {
       const connection = await dbConnection();
@@ -11,8 +12,12 @@ const CarModel = {
       if( page < 1) {
        page = 1;
       }
-
-      //caso coloque um valor negativo no limit ou um valor maior que 10 o que vai retormar ?
+      if(limit < 1) {
+        limit = 5;
+      }
+      if(limit >= 10) {
+        limit = 10;
+      }
 
       if (year) {
         conditions.push('year = ?');
@@ -59,6 +64,7 @@ const CarModel = {
       const connection = await dbConnection();
       const [rows] = await connection.query('SELECT * FROM cars WHERE plate = ?', [plate]);
       connection.end();
+      console.log('rows', rows, rows[0]);
       return rows[0];
     } catch (error) {
       console.error('Error fetching car by plate:', error.message);
