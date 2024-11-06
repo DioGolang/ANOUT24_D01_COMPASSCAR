@@ -1,5 +1,6 @@
 const express = require('express')
 const cors = require('cors')
+const setupSwagger = require('./swagger');
 require('dotenv').config();
 const PORT = process.env.PORT || 3000;
 const carRoutes = require('./routes/car.routes');
@@ -14,6 +15,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/v1/cars', carRoutes);
+setupSwagger(app);
 
 app.listen(PORT, () => {
   console.log(`app listening at http://localhost:${PORT}`);
