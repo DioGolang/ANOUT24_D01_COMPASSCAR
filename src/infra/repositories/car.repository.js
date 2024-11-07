@@ -1,6 +1,6 @@
-const dbConnection = require('../utils/db');
+const dbConnection = require('../../utils/db');
 
-const CarModel = {
+const CarRepository = {
 
   findAll: async function(filters = {}) {
     try {
@@ -157,4 +157,4 @@ const CarModel = {
     }
   }
 }
-module.exports = CarModel;
+module.exports = CarRepository;

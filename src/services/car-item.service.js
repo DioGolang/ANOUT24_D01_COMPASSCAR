@@ -1,6 +1,6 @@
-const CarItemModel = require('../models/car-item.model');
+const CarItemModel = require('../infra/repositories/car-item.repository');
 const { validateItems } = require('../validators/item.validator');
-const CarException = require('../errors/car.exception');
+const CarException = require('../domain/exceptions/Car.exception');
 
 const CarItemService = {
 

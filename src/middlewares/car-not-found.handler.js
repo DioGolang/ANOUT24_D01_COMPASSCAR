@@ -1,5 +1,5 @@
-const Car = require('../models/car.model');
-const CarException = require('../errors/car.exception');
+const Car = require('../infra/repositories/car.repository');
+const CarException = require('../domain/exceptions/Car.exception');
 
 const carNotFoundHandler = async (req, res, next) => {
   try {

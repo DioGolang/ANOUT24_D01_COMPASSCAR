@@ -1,5 +1,5 @@
-const CarModel = require('../models/car.model');
-const CarException = require('../errors/car.exception');
+const CarModel = require('../infra/repositories/car.repository');
+const CarException = require('../domain/exceptions/Car.exception');
 const { validateCarFields } = require('../validators/car.validator');
 
 const CarService = {

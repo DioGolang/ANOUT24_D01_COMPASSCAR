@@ -1,4 +1,4 @@
-const CarItemService = require('../services/car-item.service');
+const CarItemService = require('../../services/car-item.service');
 
 const CarItemController = {
   async create(req, res, next) {

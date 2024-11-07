@@ -1,5 +1,4 @@
-const UserModel = require('../models/user.model');
-const UserException = require('../errors/user.exception');
+const UserException = require('../domain/exceptions/User.exception');
 
 const userService = {
   async create(user) {

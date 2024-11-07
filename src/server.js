@@ -4,8 +4,8 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 require('dotenv').config();
 const PORT = process.env.PORT || 3000;
-const carRoutes = require('./routes/car.routes');
-const authRoutes = require('./routes/auth.routes');
+const carRoutes = require('./presentation/routes/car.routes');
+const authRoutes = require('./presentation/routes/auth.routes');
 const errorHandler = require('./middlewares/error.handler');
 
 const app = express();

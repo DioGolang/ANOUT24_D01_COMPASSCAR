@@ -1,7 +1,7 @@
-const dbConnection = require('../utils/db');
-const { findById: findCar } = require('./car.model');
+const dbConnection = require('../../utils/db');
+const { findById: findCar } = require('./car.repository');
 
-const CarItemModel = {
+const CarItemRepository = {
 
   async findByCarId(carId) {
     const connection = await dbConnection();
@@ -51,4 +51,4 @@ const CarItemModel = {
   }
 
 };
-module.exports = CarItemModel;
+module.exports = CarItemRepository;
