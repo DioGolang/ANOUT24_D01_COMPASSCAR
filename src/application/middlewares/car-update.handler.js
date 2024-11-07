@@ -1,5 +1,5 @@
-const CarException = require('../domain/exceptions/Car.exception');
-const { validatePlate, validateYear } = require('../validators/car.validator');
+const CarException = require('../../domain/exceptions/Car.exception');
+const { validatePlate, validateYear } = require('../../validators/car.validator');
 
 const carUpdateHandler = async (req, res, next) => {
   try {

@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "API Compass Car ",
+    "title": "API Compass Car",
     "description": "API - We operate in the car rental segment.",
     "contact": {
       "name": "Diogo Vasconcelos"
@@ -18,6 +18,7 @@
     "/": {
       "post": {
         "summary": "Car Registration",
+        "operationId": "createCar",
         "description": "Register a new car",
         "tags": [
           "Cars"
@@ -26,28 +27,33 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Car"
+                "$ref": "#/components/schemas/Cars"
               },
-                "examples": {
-                  "car": {
-                    "value": {
-                      "brand": "Chevrolet",
-                      "model": "Onix",
-                      "year": 2021,
-                      "plate": "ABC-1Z34"
-                    }
+              "examples": {
+                "car": {
+                  "value": {
+                    "brand": "Chevrolet",
+                    "model": "Onix",
+                    "year": 2021,
+                    "plate": "ABC-1Z34"
                   }
                 }
+              }
             }
           }
         },
         "responses": {
           "201": {
             "description": "Created",
+            "links": {
+                "cars": {
+                    "operationId": "post"
+                }
+            },
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Car"
+                  "$ref": "#/components/schemas/Cars"
                 }
               }
             }
@@ -83,11 +89,145 @@
           }
         }
       }
+    },
+    "/{id}": {
+        "get": {
+            "summary": "Car Search",
+            "operationId": "getCar",
+            "description": "Search for a car by ID",
+            "tags": [
+            "Cars"
+            ],
+            "parameters": [
+            {
+                "name": "id",
+                "in": "path",
+                "description": "Car ID",
+                "required": true,
+                "schema": {
+                "type": "number",
+                "example": 1
+                }
+            }
+            ],
+          "responses": {
+            "200": {
+              "description": "Car search result",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Cars"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Car not found"
+            },
+            "500": {
+              "description": "An internal server error occurred"
+            }
+          }
+        }
+    },
+    "/auth/register": {
+      "post": {
+        "summary": "User Registration",
+        "description": "Register a new user to the system",
+        "tags": [
+          "Authentication"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "newuser@example.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "yourpassword"
+                  },
+                  "name": {
+                    "type": "string",
+                    "example": "John Doe"
+                  }
+                },
+                "required": [
+                  "email",
+                  "password",
+                  "name"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User registered successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "User registered successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "example": [
+                        "Email is required",
+                        "Password is required",
+                        "Name is required"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "User already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "User already exists"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An internal server error occurred"
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
-      "Car": {
+      "Cars": {
         "type": "object",
         "properties": {
           "id": {
@@ -104,6 +244,61 @@
           },
           "plate": {
             "type": "string"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
+      "Cars items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "car_id": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date"
           }
         }
       }

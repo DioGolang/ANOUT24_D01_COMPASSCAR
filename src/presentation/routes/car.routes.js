@@ -1,11 +1,11 @@
 const express = require('express')
 const CarController = require('../controllers/car.controller')
 const CarItemController = require('../controllers/car-item.controller')
-const checkDuplicatePlateHandler = require('../../middlewares/check-duplicate-plate.handler');
-const carNotFoundHandler = require('../../middlewares/car-not-found.handler')
-const carUpdateHandler = require('../../middlewares/car-update.handler')
+const checkDuplicatePlateHandler = require('../../application/middlewares/check-duplicate-plate.handler');
+const carNotFoundHandler = require('../../application/middlewares/car-not-found.handler')
+const carUpdateHandler = require('../../application/middlewares/car-update.handler')
 
-const errorHandler = require('../../middlewares/error.handler')
+const errorHandler = require('../../application/middlewares/error.handler')
 
 const router = express.Router()
 

@@ -1,5 +1,5 @@
-const CarService = require('../services/car.service');
-const CarException = require('../domain/exceptions/Car.exception');
+const CarService = require('../../services/car.service');
+const CarException = require('../../domain/exceptions/Car.exception');
 
 const checkDuplicatePlateHandler = async (req, res, next) => {
   try {

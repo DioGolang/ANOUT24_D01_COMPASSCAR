@@ -6,7 +6,7 @@ require('dotenv').config();
 const PORT = process.env.PORT || 3000;
 const carRoutes = require('./presentation/routes/car.routes');
 const authRoutes = require('./presentation/routes/auth.routes');
-const errorHandler = require('./middlewares/error.handler');
+const errorHandler = require('./application/middlewares/error.handler');
 
 const app = express();
 app.use(cors());
@@ -19,7 +19,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/v1/cars', carRoutes);
-app.use('/api/auth', authRoutes);
+app.use('/api/v1/auth', authRoutes);
 
 
 app.listen(PORT, () => {
