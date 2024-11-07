@@ -1,0 +1,112 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API Compass Car ",
+    "description": "API - We operate in the car rental segment.",
+    "contact": {
+      "name": "Diogo Vasconcelos"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/api/v1/cars",
+      "description": "Local server"
+    }
+  ],
+  "paths": {
+    "/": {
+      "post": {
+        "summary": "Car Registration",
+        "description": "Register a new car",
+        "tags": [
+          "Cars"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Car"
+              },
+                "examples": {
+                  "car": {
+                    "value": {
+                      "brand": "Chevrolet",
+                      "model": "Onix",
+                      "year": 2021,
+                      "plate": "ABC-1Z34"
+                    }
+                  }
+                }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Car"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "example": [
+                        "brand is required",
+                        "model is required",
+                        "year is required",
+                        "plate is required",
+                        "year must be between 2015 and 2025",
+                        "plate must be in the correct format ABC-1C34"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "car already registered"
+          },
+          "500": {
+            "description": "an internal server error occurred"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Car": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "brand": {
+            "type": "string"
+          },
+          "model": {
+            "type": "string"
+          },
+          "year": {
+            "type": "number"
+          },
+          "plate": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
