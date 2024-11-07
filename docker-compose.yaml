@@ -11,8 +11,6 @@ services:
     volumes:
       - .docker/db_data:/var/lib/mysql:Z
       - ./mysql-init:/docker-entrypoint-initdb.d:Z
-    env_file:
-      - .env
     healthcheck:
       test: ["CMD-SHELL", "mysqladmin -uroot -proot ping"]
       interval: 10s

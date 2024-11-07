@@ -27,7 +27,7 @@ Content-Type: application/json
 > {% client.global.set("carId", response.body.id); %}
 
 ### CREATE ITENS
-POST http://localhost:3000/api/v1/cars/76/items
+POST http://localhost:3000/api/v1/cars/{{carId}}/items
 Content-Type: application/json
 
   [
