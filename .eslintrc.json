@@ -1,0 +1,31 @@
+{
+	"env": {
+	"node": true,
+		"es2022": true
+	},
+	"extends": ["eslint:recommended", "plugin:prettier/recommended"],
+	"parserOptions": {
+	"ecmaVersion": "latest",
+		"sourceType": "module"
+	},
+	"rules": {
+		"prettier/prettier": [
+			"error",
+			{
+				"semi": true,
+				"bracketSpacing": true,
+				"arrowParens": "always",
+				"endOfLine": "lf",
+				"jsxSingleQuote": true,
+				"printWidth": 140,
+				"quoteProps": "consistent",
+				"singleQuote": true,
+				"trailingComma": "all",
+				"useTabs": true
+			}
+		],
+		"no-unused-vars": "warn",
+		"semi": ["error", "always"]
+		//	"no-console": "warn",
+	}
+}

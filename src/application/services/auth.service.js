@@ -1,15 +1,21 @@
 const UserService = require('../services/user.sevice');
-const UserRepository = require('../../infra/repositories/user.repository');
-const UserException = require('../../domain/exceptions/User.exception');
+const UserValidationService = require('../../domain/service/user-validation.service');
+const AuthValidationService = require('./auth-validation.service');
+const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 const AuthService = {
-  async register(userDTO) {
-    const userExists = await UserRepository.findByEmail(userDTO.email);
-    if (userExists) {
-      throw new UserException('Email already in use', 400, 'USER_EXISTS');
-    }
-    return await UserService.create(userDTO);
-  },
+	async register(userDTO) {
+		await UserValidationService.ensureEmailNotInUse(userDTO.email);
+		return await UserService.create(userDTO);
+	},
+	async login(email, password) {
+		const user = await AuthValidationService.userExists(email);
+		await AuthValidationService.passwordMatches(password, user);
+		const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+			expiresIn: process.env.JWT_EXPIRATION,
+		});
+		return { token };
+	},
 };
 module.exports = AuthService;

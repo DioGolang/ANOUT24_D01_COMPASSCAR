@@ -1,10 +1,10 @@
 class UserException extends Error {
-  constructor(message, status = 400, code = 'USER_ERROR') {
-    super(message);
-    this.status = status;
-    this.code = code;
-    this.isOperational = true;
-    Error.captureStackTrace(this, this.constructor);
-  }
+	constructor(message, status = 400, code = 'USER_ERROR') {
+		super(message);
+		this.status = status;
+		this.code = code;
+		this.isOperational = true;
+		Error.captureStackTrace(this, this.constructor);
+	}
 }
 module.exports = UserException;
