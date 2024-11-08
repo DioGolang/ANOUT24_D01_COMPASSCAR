@@ -17,6 +17,8 @@ Content-Type: application/json
   "password": "12345678"
 }
 
+> {% client.global.set("token", response.body.token); %}
+
 ### ALL CARS
 GET http://localhost:3000/api/v1/cars
 
@@ -35,11 +37,12 @@ GET http://localhost:3000/api/v1/cars/10
 ### CREATE CAR
 POST http://localhost:3000/api/v1/cars
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
   "brand": "Marca",
   "model": "Modelo",
-  "year": 2058,
+  "year": 2017,
   "plate": "ABC-1D01"
 }
 
@@ -48,6 +51,7 @@ Content-Type: application/json
 ### CREATE ITENS
 POST http://localhost:3000/api/v1/cars/{{carId}}/items
 Content-Type: application/json
+
 
   [
     "Ar condicionado",
