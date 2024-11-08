@@ -3,8 +3,17 @@ POST http://localhost:3000/api/v1/auth/register
 Content-Type: application/json
 
 {
-  "name": "Diogo",
-  "email": "Vasconcelos@compasso.pb.br",
+  "name": "DVasconcelos",
+  "email": "Vasconcelos@compasso.pb.com.br",
+  "password": "12345678"
+}
+
+### LOGIN USER
+POST http://localhost:3000/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "Vasconcelos@compasso.pb.com.br",
   "password": "12345678"
 }
 

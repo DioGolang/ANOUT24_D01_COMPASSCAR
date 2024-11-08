@@ -12,9 +12,10 @@ const AuthService = {
 	async login(email, password) {
 		const user = await AuthValidationService.userExists(email);
 		await AuthValidationService.passwordMatches(password, user);
-		const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
-			expiresIn: process.env.JWT_EXPIRATION,
+		const token = await jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, {
+			expiresIn: process.env.JWT_EXPIRES_IN,
 		});
+		console.log(token);
 		return { token };
 	},
 };

@@ -1,5 +1,5 @@
-const express = require('express')
-const cors = require('cors')
+const express = require('express');
+const cors = require('cors');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 require('dotenv').config();
@@ -15,14 +15,12 @@ app.use(express.json());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.get('/', (req, res) => {
-  res.status(200).json({data: "hello word!"})
+	res.status(200).json({ data: 'hello word!' });
 });
 
 app.use('/api/v1/cars', carRoutes);
 app.use('/api/v1/auth', authRoutes);
 
-
 app.listen(PORT, () => {
-  console.log(`app listening at http://localhost:${PORT}`);
+	console.log(`app listening at http://localhost:${PORT}`);
 });
-

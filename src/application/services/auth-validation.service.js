@@ -10,7 +10,8 @@ const AuthValidationService = {
 		return user;
 	},
 	async passwordMatches(password, user) {
-		const isPasswordCorrect = compare(password, user.password);
+		const isPasswordCorrect = await compare(password, user.password);
+		console.log('is password correct', isPasswordCorrect);
 		if (!isPasswordCorrect) {
 			throw new UserException('Invalid password', 400, 'INVALID_PASSWORD');
 		}

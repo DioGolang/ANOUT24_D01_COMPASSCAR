@@ -3,8 +3,8 @@ const UserException = require('../../domain/exceptions/User.exception');
 
 const UserValidationService = {
 	async ensureEmailNotInUse(email) {
-		const UserExists = await UserRepository.findByEmail(email);
-		if (UserExists) {
+		const userExists = await UserRepository.findByEmail(email);
+		if (userExists) {
 			throw new UserException('Email already in use', 400, 'USER_EXISTS');
 		}
 	},

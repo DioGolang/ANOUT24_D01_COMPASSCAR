@@ -6,5 +6,6 @@ const errorHandler = require('../../application/middlewares/error.handler');
 const router = express.Router();
 
 router.post('/register', validationUserDataHandler, AuthController.register);
+router.post('/login', AuthController.login);
 router.use(errorHandler);
 module.exports = router;
