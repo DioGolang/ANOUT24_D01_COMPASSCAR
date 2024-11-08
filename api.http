@@ -3,17 +3,19 @@ POST http://localhost:3000/api/v1/auth/register
 Content-Type: application/json
 
 {
-  "name": "DVasconcelos",
-  "email": "Vasconcelos@compasso.pb.com.br",
+  "name": "Diogo Vasconcelos",
+  "email": "Vasconcelos.pb@compasso.com.br",
   "password": "12345678"
 }
+
+> {% client.global.set("email", response.body.email); %}
 
 ### LOGIN USER
 POST http://localhost:3000/api/v1/auth/login
 Content-Type: application/json
 
 {
-  "email": "Vasconcelos@compasso.pb.com.br",
+  "email": "Vasconcelos.pb@compasso.com.br",
   "password": "12345678"
 }
 
@@ -70,4 +72,4 @@ Content-type: application/json
 }
 
 ### DELETE CAR
-DELETE http://localhost:3000/api/v1/cars/4
+DELETE http://localhost:3000/api/v1/cars/1

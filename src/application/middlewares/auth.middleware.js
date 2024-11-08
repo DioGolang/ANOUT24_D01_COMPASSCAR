@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const authenticateToken = (req, res, next) => {
+const authenticateTokenHandler = (req, res, next) => {
 	const token = req.header('Authorization')?.split(' ')[1];
 
 	if (!token) {
@@ -14,4 +14,4 @@ const authenticateToken = (req, res, next) => {
 		res.status(400).json({ message: 'Invalid token.' });
 	}
 };
-module.exports = authenticateToken;
+module.exports = authenticateTokenHandler;

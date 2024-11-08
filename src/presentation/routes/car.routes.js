@@ -6,13 +6,13 @@ const carNotFoundHandler = require('../../application/middlewares/car-not-found.
 const carUpdateHandler = require('../../application/middlewares/car-update.handler');
 
 const errorHandler = require('../../application/middlewares/error.handler');
-const authenticateToken = require('../../application/middlewares/auth.middleware');
+const authenticateTokenHandler = require('../../application/middlewares/auth.middleware');
 
 const router = express.Router();
 
 router.get('/', CarController.getAll);
 router.get('/:id', carNotFoundHandler, CarController.getById);
-router.post('/', [authenticateToken, checkDuplicatePlateHandler], CarController.create);
+router.post('/', [authenticateTokenHandler, checkDuplicatePlateHandler], CarController.create);
 router.patch('/:id', [carNotFoundHandler, checkDuplicatePlateHandler, carUpdateHandler], CarController.update);
 router.delete('/:id', carNotFoundHandler, CarController.delete);
 router.post('/:id/items', carNotFoundHandler, CarItemController.create);

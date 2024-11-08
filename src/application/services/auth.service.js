@@ -1,4 +1,4 @@
-const UserService = require('../services/user.sevice');
+const UserService = require('../../domain/service/user.service');
 const UserValidationService = require('../../domain/service/user-validation.service');
 const AuthValidationService = require('./auth-validation.service');
 const jwt = require('jsonwebtoken');
@@ -7,7 +7,7 @@ require('dotenv').config();
 const AuthService = {
 	async register(userDTO) {
 		await UserValidationService.ensureEmailNotInUse(userDTO.email);
-		return await UserService.create(userDTO);
+		return UserService.register(userDTO);
 	},
 	async login(email, password) {
 		const user = await AuthValidationService.userExists(email);
@@ -15,7 +15,6 @@ const AuthService = {
 		const token = await jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, {
 			expiresIn: process.env.JWT_EXPIRES_IN,
 		});
-		console.log(token);
 		return { token };
 	},
 };

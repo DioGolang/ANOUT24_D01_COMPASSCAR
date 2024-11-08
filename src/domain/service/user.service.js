@@ -3,10 +3,10 @@ const hashPassword = require('../../utils/hash.password');
 const UserException = require('../exceptions/User.exception');
 
 const userService = {
-	async register(userData) {
-		validateUserInput(userData);
-		const hashedPassword = await hashPassword.hash(userData.password);
-		const userWithHashedPassword = { ...userData, password: hashedPassword };
+	async register(userDTO) {
+		validateUserInput(userDTO);
+		const hashedPassword = await hashPassword.hash(userDTO.password);
+		const userWithHashedPassword = { ...userDTO.toObject(), password: hashedPassword };
 		return await userRepository.create(userWithHashedPassword);
 	},
 };
