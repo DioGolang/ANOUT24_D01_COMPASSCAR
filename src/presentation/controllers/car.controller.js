@@ -1,11 +1,20 @@
 const CarService = require('../../services/car.service');
+const CarsService = require('../../domain/service/car.service');
 const CarException = require('../../domain/exceptions/Car.exception');
+const CarsDto = require('../../application/dto/cars.dto');
+const CarsResponseDTO = require('../../application/dto/cars.reponse.dto');
 
 const CarController = {
 	async create(req, res, next) {
 		try {
+			// const carsDto = new CarsDto(req.body);
+			// carsDto.validate();
+			// const car = await CarsService.create(carsDto);
+			// const carResponse = new CarsResponseDTO(car);
+			// res.status(201).json(carResponse.toObject());
 			const car = await CarService.create(req.body);
-			res.status(201).json(car);
+			const carResponse = new CarsResponseDTO(car);
+			res.status(201).json(carResponse.toObject());
 		} catch (error) {
 			next(error);
 		}

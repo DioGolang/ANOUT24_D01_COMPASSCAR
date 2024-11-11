@@ -81,7 +81,7 @@ function validateCarFields(car, cars) {
 	}
 
 	if (car.year && !validateYear(car.year)) {
-		errors.push(`year must be between ${new Date().getFullYear() - 10} and ${new Date().getFullYear()}`);
+		errors.push(`year must be between ${new Date().getFullYear() - 10} and ${new Date().getFullYear() + 1}`);
 	}
 
 	return errors;

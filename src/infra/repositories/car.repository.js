@@ -1,22 +1,16 @@
 const dbConnection = require('../../utils/db');
+const CarException = require('../../domain/exceptions/Car.exception');
 
 const CarRepository = {
-	findAll: async function (filters = {}) {
+	async findAll(filters = {}) {
+		const connection = await dbConnection();
 		try {
-			const connection = await dbConnection();
 			let { year, final_place, brand, limit = 5, page = 1 } = filters;
 			const conditions = [];
 			const params = [];
 
-			if (page < 1) {
-				page = 1;
-			}
-			if (limit < 1) {
-				limit = 5;
-			}
-			if (limit >= 10) {
-				limit = 10;
-			}
+			page = Math.max(1, parseInt(page));
+			limit = Math.min(Math.max(1, parseInt(limit)), 10);
 
 			if (year) {
 				conditions.push('year = ?');
@@ -27,47 +21,55 @@ const CarRepository = {
 				params.push(`%${final_place}`);
 			}
 			if (brand) {
-				conditions.push('brand  LIKE ?');
+				conditions.push('brand LIKE ?');
 				params.push(`%${brand}%`);
 			}
-			const whereClause = conditions.length ? ` WHERE ${conditions.join(' AND ')}` : '';
+
+			const whereClause = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
 			const offset = (page - 1) * limit;
-			const [cars] = await connection.query('SELECT * FROM cars' + whereClause + ' LIMIT ? OFFSET ?', [...params, limit, offset]);
+
+			const [cars] = await connection.query(`SELECT * FROM cars ${whereClause} LIMIT ? OFFSET ?`, [...params, limit, offset]);
+
 			const [countResult] = await connection.query(`SELECT COUNT(*) as count FROM cars ${whereClause}`, params);
-			const pages = Math.ceil(countResult[0].count / limit);
-			connection.end();
-			if (cars.length === 0) {
-				return { count: countResult[0].count, pages: 0, data: [] };
-			}
-			return { count: countResult[0].count, pages: pages, data: cars };
+
+			const total = countResult[0].count;
+			const pages = Math.ceil(total / limit);
+
+			return { count: total, pages, data: cars };
 		} catch (error) {
 			console.error('Error fetching cars:', error.message);
-			throw error;
+			throw new CarException('Failed to fetch cars', 500);
+		} finally {
+			connection.end();
 		}
 	},
 
-	findById: async function (id) {
+	async findById(id) {
+		const connection = await dbConnection();
 		try {
-			const connection = await dbConnection();
 			const [rows] = await connection.query('SELECT * FROM cars WHERE id = ?', [id]);
-			connection.end();
 			return rows[0] || null;
 		} catch (error) {
 			console.error('Error fetching car by id:', error.message);
-			throw error;
+			throw new CarException('Car not found', 404);
+		} finally {
+			connection.end();
 		}
 	},
 
-	findByIdWithItems: async function (id) {
+	async findByIdWithItems(id) {
+		const connection = await dbConnection();
 		try {
-			const connection = await dbConnection();
 			const [rows] = await connection.query(
-				"SELECT cars.*, COALESCE(cars_items.name, '') as name FROM cars LEFT JOIN cars_items ON cars.id = cars_items.car_id WHERE cars.id = ?",
+				`SELECT cars.*, COALESCE(cars_items.name, '') as item_name 
+				FROM cars 
+				LEFT JOIN cars_items ON cars.id = cars_items.car_id 
+				WHERE cars.id = ?`,
 				[id],
 			);
-			connection.end();
 
-			console.log('rows', rows.name);
+			if (!rows.length) throw new CarException('Car not found', 404);
+
 			const car = {
 				id: rows[0].id,
 				brand: rows[0].brand,
@@ -75,100 +77,94 @@ const CarRepository = {
 				year: rows[0].year,
 				plate: rows[0].plate,
 				created_at: rows[0].created_at,
-				items: rows.name ? rows.map((row) => row.name) : [],
+				items: rows.map((row) => row.item_name).filter((item) => item),
 			};
 			return car;
 		} catch (error) {
-			console.error('Error fetching car by id:', error.message);
+			console.error('Error fetching car with items:', error.message);
 			throw error;
+		} finally {
+			connection.end();
 		}
 	},
 
-	findByPlate: async function (plate) {
+	async findByPlate(plate) {
+		const connection = await dbConnection();
 		try {
-			const connection = await dbConnection();
 			const [rows] = await connection.query('SELECT * FROM cars WHERE plate = ?', [plate]);
-			connection.end();
-			console.log('rows', rows, rows[0]);
-			return rows[0];
+			return rows[0] || null;
 		} catch (error) {
 			console.error('Error fetching car by plate:', error.message);
-			throw error;
+			throw new CarException('Car not found by plate', 404);
+		} finally {
+			connection.end();
 		}
 	},
+
 	async create(car) {
+		console.log('REPOSITORY', car);
+		const connection = await dbConnection();
 		try {
-			const connection = await dbConnection();
 			const [result] = await connection.query(`INSERT INTO cars (brand, model, year, plate) VALUES (?, ?, ?, ?)`, [
 				car.brand,
 				car.model,
 				car.year,
 				car.plate,
 			]);
-			connection.end();
-			const createdCar = await this.findById(result.insertId);
-			return { id: createdCar.id, ...car, created_at: createdCar.created_at };
+			return await this.findById(result.insertId);
 		} catch (error) {
 			console.error('Error creating car:', error.message);
-			throw error;
+			throw new CarException('Failed to create car', 500);
+		} finally {
+			connection.end();
 		}
 	},
+
 	async update(id, car) {
-		console.log('AQUI', car);
+		const connection = await dbConnection();
 		try {
-			const connection = await dbConnection();
 			const fields = [];
 			const values = [];
 
-			if (car.brand) {
-				fields.push('brand = ?');
-				values.push(car.brand);
-			}
-			if (car.model) {
-				fields.push('model = ?');
-				values.push(car.model);
-			}
-			if (car.year) {
-				fields.push('year = ?');
-				values.push(car.year);
-			}
-			if (car.plate) {
-				fields.push('plate = ?');
-				values.push(car.plate);
-			}
+			if (car.brand) fields.push('brand = ?'), values.push(car.brand);
+			if (car.model) fields.push('model = ?'), values.push(car.model);
+			if (car.year) fields.push('year = ?'), values.push(car.year);
+			if (car.plate) fields.push('plate = ?'), values.push(car.plate);
+
+			if (!fields.length) throw new CarException('No fields to update', 400);
+
 			values.push(id);
-
 			const query = `UPDATE cars SET ${fields.join(', ')} WHERE id = ?`;
+			await connection.query(query, values);
 
-			const [result] = await connection.query(query, values);
-			connection.end();
-
-			const updatedCar = await this.findById(id);
-			return { id: updatedCar.id, ...car };
+			return await this.findById(id);
 		} catch (error) {
 			console.error('Error updating car:', error.message);
-			throw error;
+			throw new CarException('Failed to update car', 500);
+		} finally {
+			connection.end();
 		}
 	},
+
 	async delete(id) {
-		let connection;
+		const connection = await dbConnection();
 		try {
-			const connection = await dbConnection();
 			await connection.beginTransaction();
-			const [items] = await connection.query('SELECT * FROM cars_items WHERE car_id = ?', [id]);
-			if (items.length > 0) {
-				await connection.query('DELETE FROM cars_items WHERE car_id = ?', [id]);
+			await connection.query('DELETE FROM cars_items WHERE car_id = ?', [id]);
+
+			const [result] = await connection.query('DELETE FROM cars WHERE id = ?', [id]);
+
+			if (result.affectedRows === 0) {
+				throw new CarException('Car not found for deletion', 404);
 			}
-			await connection.query('DELETE FROM cars WHERE id = ?', [id]);
+
 			await connection.commit();
-			connection.end();
 		} catch (error) {
-			if (connection) {
-				await connection.rollback();
-				connection.end();
-			}
+			await connection.rollback();
 			console.error('Error deleting car:', error.message);
-			throw error;
+			throw new CarException('Failed to delete car', 500);
+		} finally {
+			connection.end();
 		}
 	},
 };

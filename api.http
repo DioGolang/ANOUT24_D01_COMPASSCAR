@@ -39,26 +39,26 @@ GET http://localhost:3000/api/v1/cars/10
 ### CREATE CAR
 POST http://localhost:3000/api/v1/cars
 Content-Type: application/json
-Authorization: Bearer {{token}}
+#Authorization: Bearer {{token}}
 
 {
-  "brand": "Marca",
-  "model": "Modelo",
-  "year": 2017,
-  "plate": "ABC-1D01"
+  "brand": "Marca7",
+  "model": "Modelo7",
+  "year": 2024,
+  "plate": "AYY-1D01"
 }
 
 > {% client.global.set("carId", response.body.id); %}
 
 ### CREATE ITENS
-POST http://localhost:3000/api/v1/cars/{{carId}}/items
+PUT http://localhost:3000/api/v1/cars/9/items
 Content-Type: application/json
 
 
   [
-    "Ar condicionado",
-    "Trava Eletrica",
-    "Vidro Eletrico"
+    "Ar condicionado1",
+    "Trava Eletrica1",
+    "Vidro Eletrico1"
   ]
 
 ### UPDATE CAR

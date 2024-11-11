@@ -30,6 +30,7 @@ const CarService = {
 		}
 	},
 	async create(car) {
+		console.log('SERVICE', car);
 		const existingCars = await CarRepository.findByPlate();
 		console.log('existingCars', existingCars);
 		const validationErrors = validateCarFields(car, existingCars);

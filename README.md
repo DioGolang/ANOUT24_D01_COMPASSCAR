@@ -10,8 +10,16 @@ Create a `.env` file in the root directory of the project and add the following 
 
 ```dotenv
 # MySQL configuration
-MYSQL_DATABASE=your_database_name
-MYSQL_ROOT_PASSWORD=your_password
+MYSQL_DATABASE=compass-car
+MYSQL_ROOT_PASSWORD=root
+MYSQL_HOST=localhost
+MYSQL_USER=root
+MYSQL_PASSWORD=root
+HOST=localhost
+PORT=3000
+# JWT
+JWT_SECRET=1234
+JWT_EXPIRES_IN=1h
 ```
 #### b. create necessary folders
 

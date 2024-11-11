@@ -1,8 +1,7 @@
 const CarException = require('../exceptions/Car.exception');
 
 class Car {
-	constructor({ id, brand, model, year, plate }) {
-		this.id = id;
+	constructor({ brand, model, year, plate }) {
 		this.brand = brand;
 		this.model = model;
 		this.year = year;
@@ -87,6 +86,14 @@ class Car {
 
 		this.validatePlate();
 		this.validateYear();
+	}
+	toData() {
+		return {
+			brand: this.brand,
+			model: this.model,
+			year: this.year,
+			plate: this.plate,
+		};
 	}
 }
 
