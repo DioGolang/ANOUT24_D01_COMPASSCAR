@@ -4,7 +4,7 @@ const CarRepository = {
 	findAll: async function (filters = {}) {
 		try {
 			const connection = await dbConnection();
-			let { year, final_place, brand, limit = 5, page = 1 } = filters; // fazer um middleware para validar os campos
+			let { year, final_place, brand, limit = 5, page = 1 } = filters;
 			const conditions = [];
 			const params = [];
 
@@ -151,15 +151,22 @@ const CarRepository = {
 		}
 	},
 	async delete(id) {
+		let connection;
 		try {
 			const connection = await dbConnection();
+			await connection.beginTransaction();
 			const [items] = await connection.query('SELECT * FROM cars_items WHERE car_id = ?', [id]);
 			if (items.length > 0) {
 				await connection.query('DELETE FROM cars_items WHERE car_id = ?', [id]);
 			}
 			await connection.query('DELETE FROM cars WHERE id = ?', [id]);
+			await connection.commit();
 			connection.end();
 		} catch (error) {
+			if (connection) {
+				await connection.rollback();
+				connection.end();
+			}
 			console.error('Error deleting car:', error.message);
 			throw error;
 		}
